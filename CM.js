@@ -5,8 +5,10 @@ const gradeInput = document.querySelector('#grade-input');
 const tip = document.querySelector('#tip');
 const list = document.querySelector('#member-list');
 
-let members = [];
+let members = JSON.parse(localStorage.getItem('members') || '[]');
 
+// 持久化
+const save = () => localStorage.setItem('members', JSON.stringify(members));
 // 渲染：生成表格行
 const render = () => {
   list.innerHTML = '';
@@ -41,6 +43,7 @@ const render = () => {
       m.name = newName.trim();
       m.studentId = newId.trim();
       m.grade = newGrade.trim();
+      save();
       render();
     });
     ops.appendChild(editBtn);
@@ -50,6 +53,7 @@ const render = () => {
     delBtn.textContent = '删除';
     delBtn.addEventListener('click', () => {
       members = members.filter(x => x.id !== m.id);
+      save();
       render();
     });
     ops.appendChild(delBtn);
@@ -73,6 +77,7 @@ form.addEventListener('submit', (e) => {
   nameInput.value = '';
   idInput.value = '';
   gradeInput.value = '';
+  save();
   render();
 });
 
